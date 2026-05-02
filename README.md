@@ -34,8 +34,11 @@ A projekt megépítéséhez a következő komponensekre van szükség:
 
 
 ## 🔌 3. Áramköri Tervezés és "Vödörlánc" Logika
-<img width="763" height="506" alt="image" src="https://github.com/user-attachments/assets/ac17f72a-a36d-42d3-905d-055be56a2f0e" />
-
+<div align="center">
+<img  width="600"
+alt="Kapcsolasi rajz" src="https://github.com/user-attachments/assets/ac17f72a-a36d-42d3-905d-055be56a2f0e" />
+<p><i>1. ábra: Az Arduino és a NeoPixel szalagok Daisy-Chain bekötési diagramja</i></p>
+</div>
 
 ### 3.1. A Kijelző megépítése (Daisy-Chain)
 Mivel a rendszer 8 különálló LED szalagból áll, az adatvonalat (Data Line) sorba kellett kötni. 
