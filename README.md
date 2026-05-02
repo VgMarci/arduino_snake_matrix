@@ -7,8 +7,6 @@ Egy klasszikus "Kígyó" (Snake) játék fizikai megvalósítása Arduino Uno mi
 🎮 **Próbáld ki te is!** A teljes, működő áramkör és a szimuláció elérhető ezen a linken: 
 [https://www.tinkercad.com/things/dxJx3nrXOPf-snake]
 
-A projekt célja egy teljes mértékben játszható...
-
 A projekt célja egy teljes mértékben játszható, hardveres alapokon nyugvó retro ügyességi játék megtervezése és leprogramozása. A projekt különlegessége, hogy a fő kijelző nem egy előregyártott mátrix modul, hanem **8 darab 8-LED-es NeoPixel szalagból** lett felépítve "daisy-chain" (vödörlánc) technológiával, soros adatátvitellel.
 
 **Főbb funkciók:**
