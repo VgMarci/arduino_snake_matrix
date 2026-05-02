@@ -86,9 +86,10 @@ A kígyó mozgását egy 2D-s koordinátarendszerben értelmezzük, ahol a bal f
 ## 🔄 5. A Játék Ciklusa (Game Loop) és Algoritmusok
 A fő `loop()` függvény egy diszkrét időlépésekben (tick) működő állapotgépet valósít meg. Minden iteráció egy képkockát (frame) jelent a játékban.
 
-## 5.1. A fő algoritmus folyamatábrája
+### 5.1. A fő algoritmus folyamatábrája
 A folyamatábra a játék egyetlen időlépésének (tick) logikáját mutatja be.
-graph TD
+
+```cpp
     A[Gombok beolvasása] --> B{Game Over állapot?}
     B -- Igen --> C[Game Over képernyő és villogás]
     C --> D[Visszatérés return]
@@ -109,3 +110,88 @@ graph TD
     P --> Q[delay 400ms - Sebesség]```
 
 ```
+
+### 5.2. A Kígyó mozgási algoritmusa
+A program nem mozgat minden egyes pixelt külön. Ehelyett a "követés" (follow-the-leader) elvét alkalmazza: minden iterációban a kígyó testrészei megkapják az előttük lévő testrész pozícióját, a fej pedig előrelép a vektor irányába.
+
+```cpp
+// Test mozgatása 
+for (int i = snakeLen - 1; i > 0; i--) {
+  snakeX[i] = snakeX[i - 1];
+  snakeY[i] = snakeY[i - 1];
+}
+// Fej mozgatása
+snakeX[0] += dirX;
+snakeY[0] += dirY;
+```
+### 5.3. 2D Koordináták leképezése 1D Címtartományra
+A NeoPixel szalagok lineárisak, így az 1-től 64-ig terjedő memóriacímet át kell számolni a logikai 8x8-as koordinátákból (x, y).
+A `getPixel(x, y)` függvény végzi el ezt a matematikai transzformációt. Mivel a hardver megépítése során minden szalagot balról jobbra (`DIN` -> `DOUT`) láncoltunk, az algoritmus a következő egyszerű képletet használja:
+
+`Cím = Y * 8 + X`
+
+
+
+## 🍎 6. Játékmechanika: Alma Generálás
+Az alma (food) megjelenése véletlenszerű. A `spawnFood()` függvény tartalmaz egy hibakezelő logikát, amely biztosítja, hogy az alma ne generálódjon olyan koordinátára, ahol a kígyó teste éppen tartózkodik (mert az lehetetlenné tenné az elérését, vagy azonnali felszedést eredményezne).
+
+```cpp
+bool valid = false;
+while (!valid) {
+  foodX = random(0, 8); 
+  foodY = random(0, 8);
+  valid = true;
+  // Ellenőrzés
+  for (int i = 0; i < snakeLen; i++) {
+    if (snakeX[i] == foodX && snakeY[i] == foodY) {
+      valid = false; 
+      break;
+    }
+  }
+}
+```
+Mivel a `random()` függvény a processzor órajele alapján generál pszeudo-véletlen számokat, minden indulásnál más helyen fog megjelenni a célpont.
+
+
+
+## 🐛 7. Tesztelés és Hibakeresés (Debugging)
+
+A projekt fejlesztése és a Tinkercad környezetben történő szimulációja során több hardveres és szoftveres kihívással is szembe kellett nézni. A hibakeresés (debugging) folyamata a következő főbb iterációkból állt:
+
+### 7.1. LED Mátrix Párhuzamos vs. Soros Kötése
+-  **A probléma:** Az első tesztek során a 8 darab LED szalag párhuzamosan lett az adatvonalra (D6) kötve. Ennek eredményeképpen a kijelzőn nem egyetlen pixel mozgott, hanem egész oszlopok/sorok villantak fel egyszerre, mivel minden szalag ugyanazt az utasítást kapta meg egyidőben.
+-  **A megoldás:** A hardver áttervezése "Daisy-Chain" (vödörlánc) topológiára. A szalagok `DIN` és `DOUT` lábainak szigorú sorbakötésével az adatcsomagok megfelelően tudtak végigfolyni mind a 64 LED-en.
+
+
+
+### 7.3. Játéksebesség és Játszhatóság
+-  **A probléma:** Az eredeti `delay(300)` beállítással a kígyó túl gyorsan mozgott a 8x8-as, viszonylag szűk pályán, így a falnak ütközés szinte elkerülhetetlen volt az emberi reakcióidő korlátai miatt.
+-  **A megoldás:** A szimulációs környezetben a főciklus késleltetésének finomhangolása (`delay(400)`), amely optimális egyensúlyt teremtett a kihívás és a játszhatóság között.
+
+
+
+## 🚀 8. Továbbfejlesztési Lehetőségek
+
+Bár a jelenlegi verzió egy teljesen funkcionális MVP (Minimum Viable Product), a jövőben a hardver és a szoftver is bővíthető további funkciókkal:
+
+1.  **Dinamikus nehézségi szint (Gyorsulás):**
+    A kód módosításával elérhető, hogy a `delay()` értéke csökkenjen (a játék gyorsuljon) minden egyes megevett alma után.
+    *Tervezett kódmódosítás:*
+    ```cpp
+    int gameSpeed = 500;
+    if (gameSpeed > 100) gameSpeed -= 10;
+    delay(gameSpeed);
+    ```
+
+2.  **Hangeffektek (Piezo Buzzer):**
+    Egy passzív piezo hangszóró integrálása a rendszerbe (pl. a `D7` digitális lábon), amely a `tone()` függvény segítségével rövid csipogást ad ki alma megevésekor, és Game Over dallamot játszik le ütközéskor.
+
+3.  **High Score (Legmagasabb pontszám) mentése:**
+    Az Arduino beépített EEPROM memóriájának (`#include <EEPROM.h>`) használatával a legmagasabb elért pontszám tartósan elmenthető lenne, így az az eszköz kikapcsolása után is megmaradna, és kiírható lenne az I2C kijelzőre a kezdőképernyőn.
+
+
+
+## 🏁 9. Összegzés
+
+A projekt sikeresen demonstrálja, hogyan lehet alapszintű elektronikai komponensekből (mikrokontroller, LED szalagok, I2C kijelző, nyomógombok) egy komplex, interaktív rendszert felépíteni. A fejlesztés során alkalmazott soros adatkommunikációs és multiplexálási elvek kiváló alapot nyújtanak komolyabb beágyazott rendszerek (Embedded Systems) tervezéséhez is.
+
