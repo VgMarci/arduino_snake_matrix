@@ -65,11 +65,33 @@ A játék logikája procedurális megközelítésben, C++ nyelven (Arduino keret
 ### 4.1. Változók és Memóriakezelés
 Az Arduino Uno (ATmega328P) mindössze 2KB SRAM memóriával rendelkezik, így az adatszerkezeteket optimalizálni kellett. A kígyó testének tárolásához egydimenziós tömböket használunk.
 ```cpp
+
+int snakeX[64];
+int snakeY[64];
+int snakeLen = 3;
+
+Örömmel! Ahhoz, hogy egy igazán ütős, egyetemi/szakmai szintű, 15 oldalas dokumentációt kapjunk, a szoftveres részt nagyon aprólékosan, logikai blokkokra bontva kell bemutatni.
+
+A GitHubon a kódmagyarázatok és a folyamatábrák (Flowchart) nagyon jól mutatnak, és rengeteg helyet foglalnak! A GitHub támogatja a Mermaid.js nevű nyelvet, amivel pusztán szövegből tudsz profi folyamatábrákat rajzolni a README-be.
+
+Íme a dokumentációd folytatása. Ezt egyenesen bemásolhatod a README.md fájlodba a 3. fejezet alá!
+
+Markdown
+## 💻 4. Szoftveres Architektúra és Adatszerkezetek
+
+A játék logikája procedurális megközelítésben, C++ nyelven (Arduino keretrendszerben) íródott. A program két fő külső könyvtárat használ a hardverek absztrakciójához:
+*   `Adafruit_NeoPixel.h`: A soros adatvonalon kommunikáló LED-ek vezérlésére.
+*   `Adafruit_LiquidCrystal.h`: Az I2C buszon kommunikáló kijelző meghajtására.
+
+### 4.1. Változók és Memóriakezelés
+Az Arduino Uno (ATmega328P) mindössze 2KB SRAM memóriával rendelkezik, így az adatszerkezeteket optimalizálni kellett. A kígyó testének tárolásához egydimenziós tömböket használunk.
+```cpp
 // Kígyó adatai (max 64 hossz)
 int snakeX[64];
 int snakeY[64];
 int snakeLen = 3;
 
+Mivel a játéktér 8x8-as, a kígyó maximális hossza 64 blokk lehet. A snakeX és snakeY tömbök indexei a kígyó testrészeit jelölik:
 
 
 
