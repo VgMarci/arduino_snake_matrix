@@ -66,7 +66,7 @@ Az Arduino Uno (ATmega328P) mindössze 2KB SRAM memóriával rendelkezik, így a
 
 int snakeX[64];
 int snakeY[64];
-int snakeLen = 3;
+int snakeLen = 3; 
 
 
 
