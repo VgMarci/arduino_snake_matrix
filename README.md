@@ -42,6 +42,9 @@ Mivel a rendszer 8 különálló LED szalagból áll, az adatvonalat (Data Line)
 Ez a topológia biztosítja, hogy az Arduino az 1-es LED-től a 64-es LED-ig folyamatos címtartományként lássa a panelt.
 
 ### 3.2. Lábkiosztási Táblázat (Pinout)
+<img width="763" height="506" alt="image" src="https://github.com/user-attachments/assets/ac17f72a-a36d-42d3-905d-055be56a2f0e" />
+
+
 
 **Nyomógombok:**
 - FEL gomb -> `D2` + `GND`
@@ -54,3 +57,7 @@ Ez a topológia biztosítja, hogy az Arduino az 1-es LED-től a 64-es LED-ig fol
 -  LCD I2C SDA (Adat) -> `A4`
 -   LCD I2C SCL (Órajel) -> `A5`
 -   Minden eszköz -> Közös `5V` és `GND`
+
+
+
+
