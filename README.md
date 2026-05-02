@@ -67,7 +67,17 @@ Az Arduino Uno (ATmega328P) mindössze 2KB SRAM memóriával rendelkezik, így a
 int snakeX[64];
 int snakeY[64];
 int snakeLen = 3; 
+```
+Mivel a játéktér 8x8-as, a kígyó maximális hossza 64 blokk lehet. A snakeX és snakeY tömbök indexei a kígyó testrészeit jelölik:
 
+`[0]` index: A kígyó feje (ez irányítja a mozgást).
+`[1]`-től `[snakeLen -1]`-ig: A kígyó teste és farka.
 
+**4.2. Irányvektorok**
+A kígyó mozgását egy 2D-s koordinátarendszerben értelmezzük, ahol a bal felső sarok a `(0,0)` pont. A mozgás irányát a `dirX` és `dirY` változók határozzák meg:
 
+- Jobbra: `dirX = 1`, `dirY = 0`
+- Balra: `dirX = -1`, `dirY = 0`
+- Lefelé: `dirX = 0`, `dirY = 1`
+- Felfelé: `dirX = 0`, `dirY = -1`
 
