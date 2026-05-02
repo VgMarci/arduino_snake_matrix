@@ -91,7 +91,7 @@ int snakeX[64];
 int snakeY[64];
 int snakeLen = 3;
 
-Mivel a játéktér 8x8-as, a kígyó maximális hossza 64 blokk lehet. A snakeX és snakeY tömbök indexei a kígyó testrészeit jelölik:
+
 
 
 
