@@ -73,7 +73,7 @@ Mivel a játéktér 8x8-as, a kígyó maximális hossza 64 blokk lehet. A snakeX
 `[0]` index: A kígyó feje (ez irányítja a mozgást).
 `[1]`-től `[snakeLen -1]`-ig: A kígyó teste és farka.
 
-**4.2. Irányvektorok**
+### 4.2. Irányvektorok**
 A kígyó mozgását egy 2D-s koordinátarendszerben értelmezzük, ahol a bal felső sarok a `(0,0)` pont. A mozgás irányát a `dirX` és `dirY` változók határozzák meg:
 
 - Jobbra: `dirX = 1`, `dirY = 0`
@@ -81,3 +81,31 @@ A kígyó mozgását egy 2D-s koordinátarendszerben értelmezzük, ahol a bal f
 - Lefelé: `dirX = 0`, `dirY = 1`
 - Felfelé: `dirX = 0`, `dirY = -1`
 
+
+
+## 🔄 5. A Játék Ciklusa (Game Loop) és Algoritmusok
+A fő `loop()` függvény egy diszkrét időlépésekben (tick) működő állapotgépet valósít meg. Minden iteráció egy képkockát (frame) jelent a játékban.
+
+## 5.1. A fő algoritmus folyamatábrája
+A folyamatábra a játék egyetlen időlépésének (tick) logikáját mutatja be.
+graph TD
+    A[Gombok beolvasása] --> B{Game Over állapot?}
+    B -- Igen --> C[Game Over képernyő és villogás]
+    C --> D[Visszatérés return]
+    B -- Nem --> E[Új irány meghatározása]
+    E --> F[Test mozgatása tömb másolással]
+    F --> G[Fej léptetése az új irányba]
+    G --> H{Ütközés a fallal?}
+    H -- Igen --> I[gameOver = true]
+    H -- Nem --> J{Ütközés saját testtel?}
+    J -- Igen --> I
+    J -- Nem --> K{Alma megevése?}
+    K -- Igen --> L[Hossz és Pontszám növelése]
+    L --> M[Új alma generálása]
+    M --> N
+    K -- Nem --> N[Képernyő törlése]
+    N --> O[Alma rajzolása pirossal]
+    O --> P[Kígyó rajzolása zölddel]
+    P --> Q[delay 400ms - Sebesség]```
+
+```
